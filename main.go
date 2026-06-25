@@ -22,7 +22,6 @@ func main() {
 
 	playerInputs := playerInputs.CreatePlayerInputObj()
 
-	playerInputs.Wg.Add(1)
 	go playerInputs.DetectKeys()
 
 	for {

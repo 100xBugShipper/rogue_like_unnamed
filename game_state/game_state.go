@@ -57,8 +57,8 @@ func (gs *GameState) MutateWorld(canvas *[][]string, moveChan chan string) {
 	xPos := gs.Player.X
 	yPos := gs.Player.Y
 
+	clearPreviousPosition(xPos, yPos, canvas)
 	if isValidMove {
-		clearPreviousPosition(xPos, yPos, canvas)
 		switch move {
 		case "x++":
 			xPos++
