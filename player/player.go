@@ -1,6 +1,7 @@
 package player
 
 type Player struct {
+	Symbol    string
 	X         int
 	Y         int
 	Health    int
@@ -8,24 +9,16 @@ type Player struct {
 	KillCount int
 }
 
-func SpawnPlayer(gameCanvas *[][]string) *Player {
-	player := "@"
+func CreatePlayer() *Player {
 	randRow := 10
 	randCol := 10
 
-	if !wallDetection(randRow, randCol, *gameCanvas) {
-		(*gameCanvas)[randRow][randCol] = player
-	}
-
 	return &Player{
+		Symbol:    "@",
 		X:         randRow,
 		Y:         randCol,
 		Health:    100,
 		Power:     0,
 		KillCount: 0,
 	}
-}
-
-func wallDetection(row, col int, canvas [][]string) bool {
-	return canvas[row][col] == "#"
 }
