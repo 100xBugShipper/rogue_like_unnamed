@@ -3,14 +3,13 @@ package renderer
 import (
 	"fmt"
 
-	"github.100xBugShipper/rogue_like/canvas"
+	"github.100xBugShipper/rogue_like/world"
 )
 
-func RenderGameMap() {
-	gameWorld := canvas.CanvasMap
-	for i := 0; i <= len(gameWorld) - 1; i++ {
-		for j := 0; j < len(gameWorld[i]); j++ {
-			fmt.Print(gameWorld[i][j])
+func RenderGameMap(gameMap world.World) {
+	for i := 0; i <= len(gameMap.Canvas) - 1; i++ {
+		for j := 0; j < len(gameMap.Canvas[i]); j++ {
+			fmt.Print(gameMap.Canvas[i][j])
 		}
 		fmt.Println()
 	}

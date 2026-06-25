@@ -6,6 +6,7 @@ import (
 	playerInputs "github.100xBugShipper/rogue_like/inputs"
 	"github.100xBugShipper/rogue_like/player"
 	"github.100xBugShipper/rogue_like/renderer"
+	"github.100xBugShipper/rogue_like/world"
 )
 
 var ROW = 15
@@ -16,16 +17,19 @@ func main() {
 	gs := gameState.GameState{
 		Player: player,
 	}
-	canvas.CreateCanvas(ROW, COL)
-	gs.SpawnPlayer()
-	renderer.RenderGameMap()
+	gameWorld := &world.World {
+		Canvas: make([][]string, ROW),
+	}
+	canvas.CreateCanvas(ROW, COL, gameWorld)
+	gs.SpawnPlayer(gameWorld)
+	renderer.RenderGameMap(*gameWorld)
 
 	playerInputs := playerInputs.CreatePlayerInputObj()
 
 	go playerInputs.DetectKeys()
 
 	for {
-		gs.MutateWorld(&canvas.CanvasMap, playerInputs.MoveChan)
-		renderer.RenderGameMap()
+		gs.MutateWorld(*gameWorld, playerInputs.MoveChan)
+		renderer.RenderGameMap(*gameWorld)
 	}
 }
