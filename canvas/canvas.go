@@ -1,0 +1,25 @@
+package canvas
+
+func createMemoryMap(row, col int) [][]string {
+	matrixMap := make([][]string, row)
+
+	for i := range matrixMap {
+		matrixMap[i] = make([]string, col)
+	}
+
+	return matrixMap
+}
+
+func CreateCanvas(row, col int) [][]string {
+	canvasMap := createMemoryMap(row, col)
+	for i := range row {
+		for j := range col {
+			if i == 0 || j == 0 || i == row - 1 || j == col - 1 {
+				canvasMap[i][j] = "#"
+			}else {
+				canvasMap[i][j] = "."
+			}
+		}
+	}
+	return canvasMap
+}
