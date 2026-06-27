@@ -22,7 +22,8 @@ func (gs *GameState) wallDetection(row, col int, canvas [][]string) bool {
 }
 
 func (gs *GameState) isValidMove(gameWorld world.World, moveChan chan string) (string, bool) {
-	for item := range moveChan {
+	item, ok := <-moveChan
+	if ok {
 		switch item {
 		case "w":
 			if gameWorld.Canvas[gs.Player.X+1][gs.Player.Y] != "#" {
@@ -40,9 +41,9 @@ func (gs *GameState) isValidMove(gameWorld world.World, moveChan chan string) (s
 			if gameWorld.Canvas[gs.Player.X][gs.Player.Y-1] != "#" {
 				return "y--", true
 			}
-		case "q":
-			os.Exit(0)
 		}
+	} else {
+		os.Exit(0)
 	}
 
 	return "", false

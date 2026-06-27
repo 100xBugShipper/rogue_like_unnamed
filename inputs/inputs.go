@@ -23,7 +23,6 @@ func (pi *PlayerInput) DetectKeys() {
 
 		pi.MoveChan <- playerInput
 	}
-	if playerInput == "q" {
-		pi.MoveChan <- "q"
-	}
+
+	close(pi.MoveChan)
 }
