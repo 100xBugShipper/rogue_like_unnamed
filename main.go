@@ -1,6 +1,8 @@
 package main
 
 import (
+	"os/exec"
+
 	"github.100xBugShipper/rogue_like/canvas"
 	gameState "github.100xBugShipper/rogue_like/game_state"
 	playerInputs "github.100xBugShipper/rogue_like/inputs"
@@ -15,6 +17,7 @@ var COL = 40
 func main() {
 
 	canvasMap := make([][]string, ROW)
+	cmdObj := &exec.Cmd{}
 
 	player := player.CreatePlayer()
 	gs := gameState.GameState{
@@ -33,6 +36,7 @@ func main() {
 
 	for {
 		gs.MutateWorld(*gameWorld, playerInputs.MoveChan)
+		renderer.ClearScreen(cmdObj)
 		renderer.RenderGameMap(*gameWorld)
 	}
 }

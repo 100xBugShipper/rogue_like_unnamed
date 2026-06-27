@@ -2,6 +2,8 @@ package renderer
 
 import (
 	"fmt"
+	"os"
+	"os/exec"
 
 	"github.100xBugShipper/rogue_like/world"
 )
@@ -13,4 +15,11 @@ func RenderGameMap(gameMap world.World) {
 		}
 		fmt.Println()
 	}
+}
+
+func ClearScreen(clearObj *exec.Cmd) {
+	cmd := exec.Command("clear")
+	cmd.Stdout = os.Stdout
+
+	cmd.Run()
 }
