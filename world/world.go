@@ -1,5 +1,5 @@
 package world
 
 type World struct {
-	Canvas [][]string
+	Canvas *[][]string
 }

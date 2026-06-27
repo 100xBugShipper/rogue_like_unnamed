@@ -13,12 +13,15 @@ var ROW = 15
 var COL = 40
 
 func main() {
+
+	canvasMap := make([][]string, ROW)
+
 	player := player.CreatePlayer()
 	gs := gameState.GameState{
 		Player: player,
 	}
 	gameWorld := &world.World {
-		Canvas: make([][]string, ROW),
+		Canvas: &canvasMap,
 	}
 	canvas.CreateCanvas(ROW, COL, gameWorld)
 	gs.SpawnPlayer(gameWorld)
