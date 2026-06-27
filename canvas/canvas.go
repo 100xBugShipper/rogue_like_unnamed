@@ -23,5 +23,5 @@ func CreateCanvas(row, col int, world *world.World) {
 			}
 		}
 	}
-	world.Canvas = &canvasMap
+	world.Canvas = canvasMap
 }
