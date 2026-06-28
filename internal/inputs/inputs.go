@@ -2,8 +2,6 @@ package playerInputs
 
 import (
 	"fmt"
-
-	"github.100xBugShipper/rogue_like/player"
 )
 
 type PlayerInput struct {

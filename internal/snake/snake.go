@@ -1,10 +1,7 @@
-package player
+package snake
 
 import (
-	"log"
-	"time"
-
-	"github.100xBugShipper/rogue_like/queue"
+	"github.100xBugShipper/rogue_like/internal/queue"
 )
 
 type Snake struct {
@@ -28,15 +25,7 @@ func CreateSnake() *Snake {
 	}
 }
 
-func (snk *Snake) AutoMove(moveChan chan string, lastMove string) string {
-	ticker := time.NewTicker(100 * time.Millisecond)
-	for {
-		_, ok := <-ticker.C
-		if ok {
-			log.Println("I am sending the last move into the channel")
-			moveChan <- lastMove
-		}
-	}
+func (snk *Snake) Move() {
 }
 
 func (snk *Snake) Eat() {

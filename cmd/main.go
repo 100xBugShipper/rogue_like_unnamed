@@ -1,13 +1,14 @@
 package main
 
 import (
+	"time"
 
-	"github.100xBugShipper/rogue_like/canvas"
-	gameState "github.100xBugShipper/rogue_like/game_state"
-	playerInputs "github.100xBugShipper/rogue_like/inputs"
-	"github.100xBugShipper/rogue_like/player"
-	"github.100xBugShipper/rogue_like/renderer"
-	"github.100xBugShipper/rogue_like/world"
+	"github.100xBugShipper/rogue_like/internal/canvas"
+	gameState "github.100xBugShipper/rogue_like/internal/game_state"
+	playerInputs "github.100xBugShipper/rogue_like/internal/inputs"
+	"github.100xBugShipper/rogue_like/internal/snake"
+	"github.100xBugShipper/rogue_like/internal/renderer"
+	"github.100xBugShipper/rogue_like/internal/world"
 )
 
 const (
@@ -20,7 +21,7 @@ func main() {
 
 	gameWorld := &world.World {
 		Canvas: canvasMap,
-		Snake: player.CreateSnake(),
+		Snake: snake.CreateSnake(),
 	}
 
 	gs := gameState.GameState{
@@ -34,8 +35,11 @@ func main() {
 	playerInputs := playerInputs.CreatePlayerInputObj()
 
 	go playerInputs.DetectKeys()
-	//TODO: Need to make it snake like
+
+	ticker := time.NewTicker(1000 * time.Millisecond)
+	//Game Loop
 	for {
+		<- ticker.C
 		gs.MutateWorld(*gameWorld, playerInputs.MoveChan)
 		renderer.ClearScreen()
 		renderer.RenderGameMap(*gameWorld)

@@ -1,6 +1,6 @@
 package canvas
 
-import "github.100xBugShipper/rogue_like/world"
+import "github.100xBugShipper/rogue_like/internal/world"
 
 func createMemoryMap(row, col int) [][]string {
 	matrixMap := make([][]string, row)

@@ -3,7 +3,7 @@ package renderer
 import (
 	"fmt"
 
-	"github.100xBugShipper/rogue_like/world"
+	"github.100xBugShipper/rogue_like/internal/world"
 )
 
 func RenderGameMap(gameMap world.World) {

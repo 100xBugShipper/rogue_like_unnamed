@@ -3,9 +3,8 @@ package gameState
 import (
 	"fmt"
 	"os"
-	"time"
 
-	world "github.100xBugShipper/rogue_like/world"
+	world "github.100xBugShipper/rogue_like/internal/world"
 )
 
 type GameState struct {
@@ -85,10 +84,6 @@ func (gs *GameState) MutateWorld(gameWorld world.World, moveChan chan string) {
 			gs.World.Snake.Y--
 		default:
 		}
-		time.Sleep(1000 * time.Millisecond)
 		movePlayer(gs.World.Snake.X, gs.World.Snake.Y, gameWorld.Canvas)
-	}
-	if move == "" {
-		gameWorld.Snake.AutoMove(moveChan, move)
 	}
 }
