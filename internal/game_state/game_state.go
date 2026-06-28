@@ -68,6 +68,11 @@ func movePlayer(x, y int, canvas [][]string) {
 	canvas[x][y] = "@"
 }
 
+func (gs *GameState) AutoMove() {
+	gs.World.Snake.SnakeQueue.Pop()
+	gs.World.Snake.SnakeQueue.AddToHead()
+}
+
 func (gs *GameState) MutateWorld(gameWorld world.World, moveChan chan string) {
 	move, isValidMove := gs.isValidMove(gameWorld, moveChan)
 
