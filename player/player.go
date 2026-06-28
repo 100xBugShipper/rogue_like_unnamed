@@ -1,24 +1,50 @@
 package player
 
-type Player struct {
-	Symbol    string
-	X         int
-	Y         int
-	Health    int
-	Power     int
-	KillCount int
+import (
+	"log"
+	"time"
+
+	"github.100xBugShipper/rogue_like/queue"
+)
+
+type Snake struct {
+	Symbol     string
+	X          int
+	Y          int
+	FoodCount  int
+	SnakeQueue queue.Queue
 }
 
-func CreatePlayer() *Player {
+func CreateSnake() *Snake {
 	randRow := 10
 	randCol := 10
 
-	return &Player{
-		Symbol:    "@",
-		X:         randRow,
-		Y:         randCol,
-		Health:    100,
-		Power:     0,
-		KillCount: 0,
+	return &Snake{
+		Symbol:     "@",
+		X:          randRow,
+		Y:          randCol,
+		FoodCount:  0,
+		SnakeQueue: queue.CreateQueue(),
 	}
 }
+
+func (snk *Snake) AutoMove(moveChan chan string, lastMove string) string {
+	ticker := time.NewTicker(100 * time.Millisecond)
+	for {
+		_, ok := <-ticker.C
+		if ok {
+			log.Println("I am sending the last move into the channel")
+			moveChan <- lastMove
+		}
+	}
+}
+
+func (snk *Snake) Eat() {
+}
+
+func (snk *Snake) Grow() {
+}
+
+
+
+

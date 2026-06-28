@@ -4,5 +4,5 @@ import "github.100xBugShipper/rogue_like/player"
 
 type World struct {
 	Canvas [][]string
-	Player *player.Player
+	Snake *player.Snake
 }

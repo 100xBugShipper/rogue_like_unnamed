@@ -20,7 +20,7 @@ func main() {
 
 	gameWorld := &world.World {
 		Canvas: canvasMap,
-		Player: player.CreatePlayer(),
+		Snake: player.CreateSnake(),
 	}
 
 	gs := gameState.GameState{
@@ -28,12 +28,13 @@ func main() {
 	}
 
 	canvas.CreateCanvas(ROW, COL, gameWorld)
-	gs.SpawnPlayer()
+	gs.SpawnSnake()
 	renderer.RenderGameMap(*gameWorld)
 
 	playerInputs := playerInputs.CreatePlayerInputObj()
 
 	go playerInputs.DetectKeys()
+	//TODO: Need to make it snake like
 	for {
 		gs.MutateWorld(*gameWorld, playerInputs.MoveChan)
 		renderer.ClearScreen()

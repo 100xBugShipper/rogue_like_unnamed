@@ -1,7 +1,9 @@
 package gameState
 
 import (
+	"fmt"
 	"os"
+	"time"
 
 	world "github.100xBugShipper/rogue_like/world"
 )
@@ -11,14 +13,14 @@ type GameState struct {
 }
 
 func CreateGameState() *GameState {
-	return &GameState {
+	return &GameState{
 		World: &world.World{},
 	}
 }
 
-func (gs *GameState) SpawnPlayer() {
-	if !gs.wallDetection(gs.World.Player.X, gs.World.Player.Y, gs.World.Canvas) {
-		gs.World.Canvas[gs.World.Player.X][gs.World.Player.Y] = gs.World.Player.Symbol
+func (gs *GameState) SpawnSnake() {
+	if !gs.wallDetection(gs.World.Snake.X, gs.World.Snake.Y, gs.World.Canvas) {
+		gs.World.Canvas[gs.World.Snake.X][gs.World.Snake.Y] = gs.World.Snake.Symbol
 	}
 }
 
@@ -31,24 +33,29 @@ func (gs *GameState) isValidMove(gameWorld world.World, moveChan chan string) (s
 	if ok {
 		switch item {
 		case "w":
-			if gameWorld.Canvas[gs.World.Player.X+1][gs.World.Player.Y] != "#" {
+			if gameWorld.Canvas[gs.World.Snake.X+1][gs.World.Snake.Y] != "#" {
 				return "x--", true
 			}
 		case "s":
-			if gameWorld.Canvas[gs.World.Player.X+1][gs.World.Player.Y] != "#" {
+			if gameWorld.Canvas[gs.World.Snake.X+1][gs.World.Snake.Y] != "#" {
 				return "x++", true
 			}
 		case "d":
-			if gameWorld.Canvas[gs.World.Player.X][gs.World.Player.Y+1] != "#" {
+			if gameWorld.Canvas[gs.World.Snake.X][gs.World.Snake.Y+1] != "#" {
 				return "y++", true
 			}
 		case "a":
-			if gameWorld.Canvas[gs.World.Player.X][gs.World.Player.Y-1] != "#" {
+			if gameWorld.Canvas[gs.World.Snake.X][gs.World.Snake.Y-1] != "#" {
 				return "y--", true
 			}
+		case "q":
+			fmt.Println("Thanks for playing")
+			os.Exit(0)
 		}
-	} else {
-		os.Exit(0)
+	} else if (gameWorld.Canvas[gs.World.Snake.X][gs.World.Snake.Y] == "#") ||
+		(gameWorld.Canvas[gs.World.Snake.X][gs.World.Snake.Y] == "@") {
+		fmt.Println("GAME OVER")
+		os.Exit(1)
 	}
 
 	return "", false
@@ -65,18 +72,23 @@ func movePlayer(x, y int, canvas [][]string) {
 func (gs *GameState) MutateWorld(gameWorld world.World, moveChan chan string) {
 	move, isValidMove := gs.isValidMove(gameWorld, moveChan)
 
-	clearPreviousPosition(gs.World.Player.X, gs.World.Player.Y, gameWorld.Canvas)
+	clearPreviousPosition(gs.World.Snake.X, gs.World.Snake.Y, gameWorld.Canvas)
 	if isValidMove {
 		switch move {
 		case "x++":
-			gs.World.Player.X++
+			gs.World.Snake.X++
 		case "x--":
-			gs.World.Player.X--
+			gs.World.Snake.X--
 		case "y++":
-			gs.World.Player.Y++
+			gs.World.Snake.Y++
 		case "y--":
-			gs.World.Player.Y--
+			gs.World.Snake.Y--
+		default:
 		}
-		movePlayer(gs.World.Player.X, gs.World.Player.Y, gameWorld.Canvas)
+		time.Sleep(1000 * time.Millisecond)
+		movePlayer(gs.World.Snake.X, gs.World.Snake.Y, gameWorld.Canvas)
+	}
+	if move == "" {
+		gameWorld.Snake.AutoMove(moveChan, move)
 	}
 }
