@@ -18,15 +18,17 @@ const (
 func main() {
 	canvasMap := make([][]string, ROW)
 
-	player := player.CreatePlayer()
-	gs := gameState.GameState{
-		Player: player,
-	}
 	gameWorld := &world.World {
 		Canvas: canvasMap,
+		Player: player.CreatePlayer(),
 	}
+
+	gs := gameState.GameState{
+		World: gameWorld,
+	}
+
 	canvas.CreateCanvas(ROW, COL, gameWorld)
-	gs.SpawnPlayer(gameWorld)
+	gs.SpawnPlayer()
 	renderer.RenderGameMap(*gameWorld)
 
 	playerInputs := playerInputs.CreatePlayerInputObj()

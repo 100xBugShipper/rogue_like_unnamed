@@ -3,17 +3,22 @@ package gameState
 import (
 	"os"
 
-	"github.100xBugShipper/rogue_like/player"
 	world "github.100xBugShipper/rogue_like/world"
 )
 
 type GameState struct {
-	Player *player.Player
+	World *world.World
 }
 
-func (gs *GameState) SpawnPlayer(gameWorld *world.World) {
-	if !gs.wallDetection(gs.Player.X, gs.Player.Y, gameWorld.Canvas) {
-		gameWorld.Canvas[gs.Player.X][gs.Player.Y] = gs.Player.Symbol
+func CreateGameState() *GameState {
+	return &GameState {
+		World: &world.World{},
+	}
+}
+
+func (gs *GameState) SpawnPlayer() {
+	if !gs.wallDetection(gs.World.Player.X, gs.World.Player.Y, gs.World.Canvas) {
+		gs.World.Canvas[gs.World.Player.X][gs.World.Player.Y] = gs.World.Player.Symbol
 	}
 }
 
@@ -26,19 +31,19 @@ func (gs *GameState) isValidMove(gameWorld world.World, moveChan chan string) (s
 	if ok {
 		switch item {
 		case "w":
-			if gameWorld.Canvas[gs.Player.X+1][gs.Player.Y] != "#" {
+			if gameWorld.Canvas[gs.World.Player.X+1][gs.World.Player.Y] != "#" {
 				return "x--", true
 			}
 		case "s":
-			if gameWorld.Canvas[gs.Player.X+1][gs.Player.Y] != "#" {
+			if gameWorld.Canvas[gs.World.Player.X+1][gs.World.Player.Y] != "#" {
 				return "x++", true
 			}
 		case "d":
-			if gameWorld.Canvas[gs.Player.X][gs.Player.Y+1] != "#" {
+			if gameWorld.Canvas[gs.World.Player.X][gs.World.Player.Y+1] != "#" {
 				return "y++", true
 			}
 		case "a":
-			if gameWorld.Canvas[gs.Player.X][gs.Player.Y-1] != "#" {
+			if gameWorld.Canvas[gs.World.Player.X][gs.World.Player.Y-1] != "#" {
 				return "y--", true
 			}
 		}
@@ -60,18 +65,18 @@ func movePlayer(x, y int, canvas [][]string) {
 func (gs *GameState) MutateWorld(gameWorld world.World, moveChan chan string) {
 	move, isValidMove := gs.isValidMove(gameWorld, moveChan)
 
-	clearPreviousPosition(gs.Player.X, gs.Player.Y, gameWorld.Canvas)
+	clearPreviousPosition(gs.World.Player.X, gs.World.Player.Y, gameWorld.Canvas)
 	if isValidMove {
 		switch move {
 		case "x++":
-			gs.Player.X++
+			gs.World.Player.X++
 		case "x--":
-			gs.Player.X--
+			gs.World.Player.X--
 		case "y++":
-			gs.Player.Y++
+			gs.World.Player.Y++
 		case "y--":
-			gs.Player.Y--
+			gs.World.Player.Y--
 		}
-		movePlayer(gs.Player.X, gs.Player.Y, gameWorld.Canvas)
+		movePlayer(gs.World.Player.X, gs.World.Player.Y, gameWorld.Canvas)
 	}
 }
