@@ -43,7 +43,6 @@ func main() {
 	for {
 		<-ticker.C
 		gs.MutateWorld(*gameWorld, playerInputs.MoveChan)
-		go gs.AutoMove()
 		renderer.ClearScreen()
 		renderer.RenderGameMap(*gameWorld)
 	}

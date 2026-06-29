@@ -3,6 +3,7 @@ package gameState
 import (
 	"fmt"
 	"os"
+	"time"
 
 	world "github.100xBugShipper/rogue_like/internal/world"
 )
@@ -28,33 +29,37 @@ func (gs *GameState) wallDetection(row, col int, canvas [][]string) bool {
 }
 
 func (gs *GameState) isValidMove(gameWorld world.World, moveChan chan string) (string, bool) {
-	item, ok := <-moveChan
-	if ok {
-		switch item {
-		case "w":
-			if gameWorld.Canvas[gs.World.Snake.X+1][gs.World.Snake.Y] != "#" {
-				return "x--", true
+	select {
+	case item, ok := <-moveChan:
+		if ok {
+			switch item {
+			case "w":
+				if gameWorld.Canvas[gs.World.Snake.X+1][gs.World.Snake.Y] != "#" {
+					return "x--", true
+				}
+			case "s":
+				if gameWorld.Canvas[gs.World.Snake.X+1][gs.World.Snake.Y] != "#" {
+					return "x++", true
+				}
+			case "d":
+				if gameWorld.Canvas[gs.World.Snake.X][gs.World.Snake.Y+1] != "#" {
+					return "y++", true
+				}
+			case "a":
+				if gameWorld.Canvas[gs.World.Snake.X][gs.World.Snake.Y-1] != "#" {
+					return "y--", true
+				}
+			case "q":
+				fmt.Println("Thanks for playing")
+				os.Exit(0)
 			}
-		case "s":
-			if gameWorld.Canvas[gs.World.Snake.X+1][gs.World.Snake.Y] != "#" {
-				return "x++", true
-			}
-		case "d":
-			if gameWorld.Canvas[gs.World.Snake.X][gs.World.Snake.Y+1] != "#" {
-				return "y++", true
-			}
-		case "a":
-			if gameWorld.Canvas[gs.World.Snake.X][gs.World.Snake.Y-1] != "#" {
-				return "y--", true
-			}
-		case "q":
-			fmt.Println("Thanks for playing")
-			os.Exit(0)
+		} else if (gameWorld.Canvas[gs.World.Snake.X][gs.World.Snake.Y] == "#") ||
+			(gameWorld.Canvas[gs.World.Snake.X][gs.World.Snake.Y] == "@") {
+			fmt.Println("GAME OVER")
+			os.Exit(1)
 		}
-	} else if (gameWorld.Canvas[gs.World.Snake.X][gs.World.Snake.Y] == "#") ||
-		(gameWorld.Canvas[gs.World.Snake.X][gs.World.Snake.Y] == "@") {
-		fmt.Println("GAME OVER")
-		os.Exit(1)
+	default:
+		gs.AutoMove()
 	}
 
 	return "", false
@@ -69,6 +74,7 @@ func movePlayer(x, y int, canvas [][]string) {
 }
 
 func (gs *GameState) AutoMove() {
+	time.Sleep(500 * time.Millisecond)
 	direction := gs.World.Snake.Direction
 	switch direction {
 	case "up":
