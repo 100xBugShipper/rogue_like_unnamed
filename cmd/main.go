@@ -38,26 +38,13 @@ func main() {
 
 	go playerInputs.DetectKeys()
 
-	ticker := time.NewTicker(1000 * time.Millisecond)
+	ticker := time.NewTicker(500 * time.Millisecond)
 	// Game Loop
 	for {
 		<-ticker.C
-		if directionChanged(playerInputs.MoveChan) {
-			gs.MutateWorld(*gameWorld, playerInputs.MoveChan)
-		}else {
-			gs.AutoMove()
-			renderer.ClearScreen()
-			renderer.RenderGameMap(*gameWorld)
-		}
+		gs.MutateWorld(*gameWorld, playerInputs.MoveChan)
+		go gs.AutoMove()
 		renderer.ClearScreen()
 		renderer.RenderGameMap(*gameWorld)
 	}
-}
-
-func directionChanged(moveChan chan string) bool {
-	_, ok := <-moveChan
-	if !ok {
-		return false
-	}
-	return true
 }

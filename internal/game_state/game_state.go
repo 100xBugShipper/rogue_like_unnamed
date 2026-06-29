@@ -69,8 +69,18 @@ func movePlayer(x, y int, canvas [][]string) {
 }
 
 func (gs *GameState) AutoMove() {
-	gs.World.Snake.SnakeQueue.Pop()
-	gs.World.Snake.SnakeQueue.AddToHead()
+	direction := gs.World.Snake.Direction
+	switch direction {
+	case "up":
+		gs.World.Snake.X--
+	case "down":
+		gs.World.Snake.X++
+	case "right":
+		gs.World.Snake.Y++
+	case "left":
+		gs.World.Snake.Y--
+	}
+	movePlayer(gs.World.Snake.X, gs.World.Snake.Y, gs.World.Canvas)
 }
 
 func (gs *GameState) MutateWorld(gameWorld world.World, moveChan chan string) {
@@ -81,12 +91,16 @@ func (gs *GameState) MutateWorld(gameWorld world.World, moveChan chan string) {
 		switch move {
 		case "x++":
 			gs.World.Snake.X++
+			gs.World.Snake.Direction = "down"
 		case "x--":
 			gs.World.Snake.X--
+			gs.World.Snake.Direction = "up"
 		case "y++":
 			gs.World.Snake.Y++
+			gs.World.Snake.Direction = "right"
 		case "y--":
 			gs.World.Snake.Y--
+			gs.World.Snake.Direction = "left"
 		default:
 		}
 		movePlayer(gs.World.Snake.X, gs.World.Snake.Y, gameWorld.Canvas)

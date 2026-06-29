@@ -10,6 +10,7 @@ type Snake struct {
 	Y          int
 	FoodCount  int
 	SnakeQueue queue.Queue
+	Direction  string
 }
 
 func CreateSnake() *Snake {
@@ -33,7 +34,3 @@ func (snk *Snake) Eat() {
 
 func (snk *Snake) Grow() {
 }
-
-
-
-
