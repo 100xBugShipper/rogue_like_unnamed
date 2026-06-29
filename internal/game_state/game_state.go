@@ -74,6 +74,7 @@ func movePlayer(x, y int, canvas [][]string) {
 }
 
 func (gs *GameState) AutoMove() {
+	clearPreviousPosition(gs.World.Snake.X, gs.World.Snake.Y, gs.World.Canvas)
 	time.Sleep(500 * time.Millisecond)
 	direction := gs.World.Snake.Direction
 	switch direction {
