@@ -9,6 +9,8 @@ type Snake struct {
 	X          int
 	Y          int
 	Food       string
+	FoodX      int
+	FoodY      int
 	SnakeQueue queue.Queue
 	Direction  string
 }
@@ -21,7 +23,7 @@ func CreateSnake() *Snake {
 		Symbol:     "@",
 		X:          randRow,
 		Y:          randCol,
-		Food:		"$",
+		Food:       "$",
 		SnakeQueue: queue.CreateQueue(),
 	}
 }
@@ -38,13 +40,3 @@ func (snk *Snake) Dequeue() {
 		snk.SnakeQueue.SnakeBody = snk.SnakeQueue.SnakeBody[1:]
 	}
 }
-
-
-
-
-
-
-
-
-
-

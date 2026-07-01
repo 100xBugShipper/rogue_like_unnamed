@@ -6,7 +6,6 @@ import (
 	"os"
 
 	"github.100xBugShipper/rogue_like/internal/queue"
-	"github.100xBugShipper/rogue_like/internal/renderer"
 	world "github.100xBugShipper/rogue_like/internal/world"
 )
 
@@ -28,10 +27,10 @@ func (gs *GameState) SpawnSnake() {
 }
 
 func (gs *GameState) SpawnFood() {
-	randRow := rand.IntN(29)
-	randCol := rand.IntN(79)
+	gs.World.Snake.FoodX = rand.IntN(29)
+	gs.World.Snake.FoodY = rand.IntN(79)
 
-	gs.World.Canvas[randRow][randCol] = "$"
+	gs.World.Canvas[gs.World.Snake.FoodX][gs.World.Snake.FoodY] = "$"
 }
 
 func (gs *GameState) wallDetection(row, col int, canvas [][]string) bool {
@@ -82,22 +81,6 @@ func movePlayer(x, y int, canvas [][]string) {
 	canvas[x][y] = "@"
 }
 
-func (gs *GameState) foodAhead() bool {
-	if gs.World.Canvas[gs.World.Snake.X+1][gs.World.Snake.Y] == "$" {
-		return true
-	}
-	if gs.World.Canvas[gs.World.Snake.X][gs.World.Snake.Y+1] == "$" {
-		return true
-	}
-	if gs.World.Canvas[gs.World.Snake.X-1][gs.World.Snake.Y] == "$" {
-		return true
-	}
-	if gs.World.Canvas[gs.World.Snake.X][gs.World.Snake.Y-1] == "$" {
-		return true
-	}
-	return false
-}
-
 func (gs *GameState) ateFood(x, y int) bool {
 
 	if gs.World.Canvas[x][y] == "$" {
@@ -114,7 +97,6 @@ func (gs *GameState) MoveSnake() {
 		Y: gs.World.Snake.Y,
 	}
 
-	renderer.ClearBody(gs.World.Snake, gs.World)
 	switch gs.World.Snake.Direction {
 	case "up":
 		gs.World.Snake.X--
@@ -134,8 +116,25 @@ func (gs *GameState) MoveSnake() {
 		gs.SpawnFood()
 	}
 
-	renderer.DrawBody(gs.World.Snake, gs.World)
 	movePlayer(gs.World.Snake.X, gs.World.Snake.Y, gs.World.Canvas)
+}
+
+// HACK: Clear everything and print everything
+func (gs *GameState) Draw() {
+    // Clear everything except walls
+    for i := range gs.World.Canvas {
+        for j := range gs.World.Canvas[i] {
+            if gs.World.Canvas[i][j] != "#" {
+                gs.World.Canvas[i][j] = "."
+            }
+        }
+    }
+    for _, part := range gs.World.Snake.SnakeQueue.SnakeBody {
+        gs.World.Canvas[part.X][part.Y] = "O"
+    }
+
+    gs.World.Canvas[gs.World.Snake.X][gs.World.Snake.Y] = "@"
+	gs.World.Canvas[gs.World.Snake.FoodX][gs.World.Snake.FoodY] = "$"
 }
 
 func (gs *GameState) MutateWorld(gameWorld world.World, moveChan chan string) {
@@ -156,4 +155,5 @@ func (gs *GameState) MutateWorld(gameWorld world.World, moveChan chan string) {
 	}
 
 	gs.MoveSnake()
+	gs.Draw()
 }
