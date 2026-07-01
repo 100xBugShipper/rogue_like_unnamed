@@ -7,6 +7,7 @@ import (
 )
 
 func RenderGameMap(gameMap world.World) {
+
 	for i := 0; i <= len(gameMap.Canvas) - 1; i++ {
 		for j := 0; j < len(gameMap.Canvas[i]); j++ {
 			fmt.Print(gameMap.Canvas[i][j])

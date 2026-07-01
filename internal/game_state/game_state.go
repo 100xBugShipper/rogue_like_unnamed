@@ -2,13 +2,17 @@ package gameState
 
 import (
 	"fmt"
+	"math/rand/v2"
 	"os"
 
+	log "github.100xBugShipper/rogue_like/internal/logger"
+	"github.100xBugShipper/rogue_like/internal/queue"
 	world "github.100xBugShipper/rogue_like/internal/world"
 )
 
 type GameState struct {
 	World *world.World
+	Cords queue.Cords
 }
 
 func CreateGameState() *GameState {
@@ -21,6 +25,13 @@ func (gs *GameState) SpawnSnake() {
 	if !gs.wallDetection(gs.World.Snake.X, gs.World.Snake.Y, gs.World.Canvas) {
 		gs.World.Canvas[gs.World.Snake.X][gs.World.Snake.Y] = gs.World.Snake.Symbol
 	}
+}
+
+func (gs *GameState) SpawnFood() {
+	randRow := rand.IntN(29)
+	randCol := rand.IntN(79)
+
+	gs.World.Canvas[randRow][randCol] = "$"
 }
 
 func (gs *GameState) wallDetection(row, col int, canvas [][]string) bool {
@@ -71,6 +82,22 @@ func movePlayer(x, y int, canvas [][]string) {
 	canvas[x][y] = "@"
 }
 
+func (gs *GameState) foodAhead() bool {
+	if gs.World.Canvas[gs.World.Snake.X+1][gs.World.Snake.Y] == "$" {
+		return true
+	}
+	if gs.World.Canvas[gs.World.Snake.X][gs.World.Snake.Y+1] == "$" {
+		return true
+	}
+	if gs.World.Canvas[gs.World.Snake.X-1][gs.World.Snake.Y] == "$" {
+		return true
+	}
+	if gs.World.Canvas[gs.World.Snake.X][gs.World.Snake.Y-1] == "$" {
+		return true
+	}
+	return false
+}
+
 func (gs *GameState) MoveSnake() {
 	clearPreviousPosition(gs.World.Snake.X, gs.World.Snake.Y, gs.World.Canvas)
 
@@ -103,6 +130,12 @@ func (gs *GameState) MutateWorld(gameWorld world.World, moveChan chan string) {
 		case "y--":
 			gs.World.Snake.Direction = "left"
 		}
+	}
+
+	if gs.foodAhead() {
+		gs.World.Snake.Grow()
+		gs.SpawnFood()
+		log.WriteToFile(*gs.World.Snake)
 	}
 	gs.MoveSnake()
 }

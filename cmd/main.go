@@ -32,13 +32,14 @@ func main() {
 
 	canvas.CreateCanvas(ROW, COL, gameWorld)
 	gs.SpawnSnake()
+	gs.SpawnFood()
 	renderer.RenderGameMap(*gameWorld)
 
 	playerInputs := playerInputs.CreatePlayerInputObj()
 
 	go playerInputs.DetectKeys()
 
-	ticker := time.NewTicker(500 * time.Millisecond)
+	ticker := time.NewTicker(200 * time.Millisecond)
 	// Game Loop
 	for {
 		<-ticker.C
