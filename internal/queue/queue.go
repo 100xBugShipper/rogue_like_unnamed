@@ -18,7 +18,7 @@ func CreateCords() *Cords {
 
 func CreateQueue() Queue {
 	return Queue {
-		SnakeBody: make([]Cords, 1),
+		SnakeBody: make([]Cords, 0),
 	}
 }
 

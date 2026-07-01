@@ -24,6 +24,23 @@ func ClearScreen() {
 func DrawBody(snk *snake.Snake, gameMap *world.World) {
 	for _, item := range snk.SnakeQueue.SnakeBody {
 		gameMap.Canvas[item.X][item.Y] = "O"
+	}
+}
+
+func ClearBody(snk *snake.Snake, gameMap *world.World) {
+	for _, item := range snk.SnakeQueue.SnakeBody {
 		gameMap.Canvas[item.X][item.Y] = "."
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+

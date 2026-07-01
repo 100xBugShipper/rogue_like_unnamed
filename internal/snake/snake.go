@@ -34,7 +34,9 @@ func (snk *Snake) Grow() {
 }
 
 func (snk *Snake) Dequeue() {
-	snk.SnakeQueue.SnakeBody = snk.SnakeQueue.SnakeBody[:len(snk.SnakeQueue.SnakeBody) - 1]
+	if len(snk.SnakeQueue.SnakeBody) > 0 {
+		snk.SnakeQueue.SnakeBody = snk.SnakeQueue.SnakeBody[1:]
+	}
 }
 
 

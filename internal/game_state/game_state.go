@@ -114,8 +114,7 @@ func (gs *GameState) MoveSnake() {
 		Y: gs.World.Snake.Y,
 	}
 
-	clearPreviousPosition(gs.World.Snake.X, gs.World.Snake.Y, gs.World.Canvas)
-
+	renderer.ClearBody(gs.World.Snake, gs.World)
 	switch gs.World.Snake.Direction {
 	case "up":
 		gs.World.Snake.X--
@@ -128,8 +127,6 @@ func (gs *GameState) MoveSnake() {
 	}
 
 	gs.World.Snake.SnakeQueue.Append(oldHead)
-	fmt.Println(gs.World.Snake.SnakeQueue.SnakeBody)
-	clearPreviousPosition(gs.World.Snake.X, gs.World.Snake.Y, gs.World.Canvas)
 
 	if !gs.ateFood(gs.World.Snake.X, gs.World.Snake.Y) {
 		gs.World.Snake.Dequeue()
