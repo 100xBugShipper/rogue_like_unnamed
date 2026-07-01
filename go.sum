@@ -1,2 +1,6 @@
 github.com/theprimeagen/vim-with-me v1.0.3 h1:lbwbGY6yWG6x3REWkb+/3wxzOKgyGpCnTAjaL58PnlM=
 github.com/theprimeagen/vim-with-me v1.0.3/go.mod h1:AhzUyNbt1zFftrKfjJme8q9pm0AcbhlGU9Ycl0ceSiI=
+golang.org/x/sys v0.46.0 h1:noSf2Fq6F8DBgS+LysIkx7rIExoNHJsxOAtPp4rthXw=
+golang.org/x/sys v0.46.0/go.mod h1:4GL1E5IUh+htKOUEOaiffhrAeqysfVGipDYzABqnCmw=
+golang.org/x/term v0.44.0 h1:0rLvDRCtNj0gZkyIXhCyOb2OAzEhLVqc4B+hrsBhrmc=
+golang.org/x/term v0.44.0/go.mod h1:7ze4MdzUzLXpSAoFP1H0bOI9aXDqveSvatT5vKcFh2Y=

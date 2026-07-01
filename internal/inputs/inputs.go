@@ -14,29 +14,13 @@ func CreatePlayerInputObj() *PlayerInput {
 	}
 }
 
-func inputChanged(checkInp chan string) {
-	var inputChanged = ""
-	fmt.Scan(&inputChanged)
-
-	checkInp <- inputChanged
-}
-
 func (pi *PlayerInput) DetectKeys() {
 	var playerInput string
-	checkInp := make(chan string, 1)
 	fmt.Println("<-- |>Game Started<| -->")
 
 	for playerInput != "q" {
 		fmt.Scan(&playerInput)
-
-		for {
-			pi.MoveChan <- playerInput
-			go inputChanged(checkInp)
-			a := <- checkInp
-			if a != playerInput {
-				break
-			}
-		}
+		pi.MoveChan <- playerInput
 	}
 
 	close(pi.MoveChan)

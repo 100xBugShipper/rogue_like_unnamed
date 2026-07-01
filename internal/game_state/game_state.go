@@ -3,7 +3,6 @@ package gameState
 import (
 	"fmt"
 	"os"
-	"time"
 
 	world "github.100xBugShipper/rogue_like/internal/world"
 )
@@ -34,7 +33,7 @@ func (gs *GameState) isValidMove(gameWorld world.World, moveChan chan string) (s
 		if ok {
 			switch item {
 			case "w":
-				if gameWorld.Canvas[gs.World.Snake.X+1][gs.World.Snake.Y] != "#" {
+				if gameWorld.Canvas[gs.World.Snake.X-1][gs.World.Snake.Y] != "#" {
 					return "x--", true
 				}
 			case "s":
@@ -59,9 +58,8 @@ func (gs *GameState) isValidMove(gameWorld world.World, moveChan chan string) (s
 			os.Exit(1)
 		}
 	default:
-		gs.AutoMove()
+		return "", false
 	}
-
 	return "", false
 }
 
@@ -73,43 +71,38 @@ func movePlayer(x, y int, canvas [][]string) {
 	canvas[x][y] = "@"
 }
 
-func (gs *GameState) AutoMove() {
+func (gs *GameState) MoveSnake() {
 	clearPreviousPosition(gs.World.Snake.X, gs.World.Snake.Y, gs.World.Canvas)
-	time.Sleep(500 * time.Millisecond)
-	direction := gs.World.Snake.Direction
-	switch direction {
+
+	switch gs.World.Snake.Direction {
 	case "up":
 		gs.World.Snake.X--
 	case "down":
 		gs.World.Snake.X++
-	case "right":
-		gs.World.Snake.Y++
 	case "left":
 		gs.World.Snake.Y--
+	case "right":
+		gs.World.Snake.Y++
 	}
+
 	movePlayer(gs.World.Snake.X, gs.World.Snake.Y, gs.World.Canvas)
 }
 
 func (gs *GameState) MutateWorld(gameWorld world.World, moveChan chan string) {
 	move, isValidMove := gs.isValidMove(gameWorld, moveChan)
+	clearPreviousPosition(gs.World.Snake.X, gs.World.Snake.Y, gs.World.Canvas)
 
-	clearPreviousPosition(gs.World.Snake.X, gs.World.Snake.Y, gameWorld.Canvas)
 	if isValidMove {
 		switch move {
 		case "x++":
-			gs.World.Snake.X++
 			gs.World.Snake.Direction = "down"
 		case "x--":
-			gs.World.Snake.X--
 			gs.World.Snake.Direction = "up"
 		case "y++":
-			gs.World.Snake.Y++
 			gs.World.Snake.Direction = "right"
 		case "y--":
-			gs.World.Snake.Y--
 			gs.World.Snake.Direction = "left"
-		default:
 		}
-		movePlayer(gs.World.Snake.X, gs.World.Snake.Y, gameWorld.Canvas)
 	}
+	gs.MoveSnake()
 }
