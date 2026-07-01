@@ -5,8 +5,8 @@ import (
 	"math/rand/v2"
 	"os"
 
-	log "github.100xBugShipper/rogue_like/internal/logger"
 	"github.100xBugShipper/rogue_like/internal/queue"
+	"github.100xBugShipper/rogue_like/internal/renderer"
 	world "github.100xBugShipper/rogue_like/internal/world"
 )
 
@@ -98,7 +98,22 @@ func (gs *GameState) foodAhead() bool {
 	return false
 }
 
+func (gs *GameState) ateFood(x, y int) bool {
+
+	if gs.World.Canvas[x][y] == "$" {
+		return true
+	}
+
+	return false
+}
+
 func (gs *GameState) MoveSnake() {
+
+	oldHead := queue.Cords {
+		X: gs.World.Snake.X,
+		Y: gs.World.Snake.Y,
+	}
+
 	clearPreviousPosition(gs.World.Snake.X, gs.World.Snake.Y, gs.World.Canvas)
 
 	switch gs.World.Snake.Direction {
@@ -112,6 +127,17 @@ func (gs *GameState) MoveSnake() {
 		gs.World.Snake.Y++
 	}
 
+	gs.World.Snake.SnakeQueue.Append(oldHead)
+	fmt.Println(gs.World.Snake.SnakeQueue.SnakeBody)
+	clearPreviousPosition(gs.World.Snake.X, gs.World.Snake.Y, gs.World.Canvas)
+
+	if !gs.ateFood(gs.World.Snake.X, gs.World.Snake.Y) {
+		gs.World.Snake.Dequeue()
+	}else {
+		gs.SpawnFood()
+	}
+
+	renderer.DrawBody(gs.World.Snake, gs.World)
 	movePlayer(gs.World.Snake.X, gs.World.Snake.Y, gs.World.Canvas)
 }
 
@@ -132,10 +158,5 @@ func (gs *GameState) MutateWorld(gameWorld world.World, moveChan chan string) {
 		}
 	}
 
-	if gs.foodAhead() {
-		gs.World.Snake.Grow()
-		gs.SpawnFood()
-		log.WriteToFile(*gs.World.Snake)
-	}
 	gs.MoveSnake()
 }

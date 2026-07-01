@@ -33,6 +33,9 @@ func (snk *Snake) Grow() {
 	snk.SnakeQueue.Append(cords)
 }
 
+func (snk *Snake) Dequeue() {
+	snk.SnakeQueue.SnakeBody = snk.SnakeQueue.SnakeBody[:len(snk.SnakeQueue.SnakeBody) - 1]
+}
 
 
 
