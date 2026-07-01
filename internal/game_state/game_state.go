@@ -92,6 +92,7 @@ func (gs *GameState) ateFood(x, y int) bool {
 
 func (gs *GameState) MoveSnake() {
 
+	// Start creating the body of the snake..
 	oldHead := queue.Cords {
 		X: gs.World.Snake.X,
 		Y: gs.World.Snake.Y,
@@ -108,9 +109,11 @@ func (gs *GameState) MoveSnake() {
 		gs.World.Snake.Y++
 	}
 
+	//Old head becomes body
 	gs.World.Snake.SnakeQueue.Append(oldHead)
 
 	if !gs.ateFood(gs.World.Snake.X, gs.World.Snake.Y) {
+		// If snake didnt eat food, remove body.. only head stays
 		gs.World.Snake.Dequeue()
 	}else {
 		gs.SpawnFood()
